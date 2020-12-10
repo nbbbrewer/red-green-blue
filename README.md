@@ -1,0 +1,2 @@
+# Red-Green-Blue
+Red-Green-Blue is tic-tac-toe using colors instead of Xs and Os. This application was made with JavaScript to practice designing functions and working with DOM manipulation. The greatest challenge was figuring out how to search an array for another array. I did not come up with a solution of my own and my thanks goes to [Mohammed Usman](https://stackoverflow.com/questions/53606337/check-if-array-contains-all-elements-of-another-array) for answering Iakshay Bakshi's question on StackOverflow. See `let checker = ...` in `checkWinners()`.

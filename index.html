@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Red-Green-Blue</title>
+        <style>
+            body {
+                width: 100%vw;
+                height: 100%vh;
+                background-color: ccornsilk;
+            }
+            .board {
+                text-align: center;
+                top: 50%;
+                margin-left: auto;
+                margin-right: auto;
+                width: 300px;
+            }
+
+            section {
+                box-sizing: border-box;
+                float: left;
+                height: 100px;
+                width: 100px;
+                border: 5px inset black;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="board">
+            <h2>Red-Green-Blue</h2>
+        </div>
+        <script>
+            // initialize winning tile combinations in a variable
+            // initialize empty arrays for red and green tiles. These arrays will be checked against the arrays in winners after every player move
+            // Initialize player and set to 1
+            
+            let winners = [[0,1,2],[0,3,6],[0,4,8],[1,4,7],[2,5,8],[2,4,6],[3,4,5],[6,7,8]]
+            let redTiles = [];
+            let greenTiles = [];
+            let player = 1;
+
+
+            // create and append all play board elements
+            function createBoard() {
+                let board = document.querySelector('.board');
+                // Create and append tiles for board
+                for (let i = 0; i < 9; i++) {
+                    let div = document.createElement('div')
+                    let section = document.createElement('section')
+                    div.appendChild(section)
+                    section.id = `tile${ i }`;
+                    section.class = i;
+                    section.style.backgroundColor = 'blue';
+                    section.addEventListener('click', ticTacToe);
+                    board.appendChild(div);
+                }
+
+                // Create description element, set its textContent, and append it to board
+                // Create reset button, add textContent and event listener for 'click' to call resetGame()
+                let desc = document.createElement('p');
+                let reset = document.createElement('button');
+                let body = document.querySelector('body');
+                desc.textContent = "Red-Green-Blue is the same as Tic-Tac-Toe except players are 'red' and 'green' instead of 'X' and 'O'. Red goes first. First to get three squares of their color in a line wins. Good luck!"
+                reset.textContent = 'Reset';
+                reset.addEventListener('click', resetGame);
+                board.appendChild(desc);
+                board.appendChild(reset);
+            }
+
+            // Check if tile is free, check which player clicked, change the color of the tile to the appropriate color, set the player variable to the opposite player
+            function ticTacToe() {
+                if (this.style.backgroundColor === 'blue') {
+                    if (player === 1) {
+                        this.style.backgroundColor = 'red';                        
+                        redTiles.push(this.class);
+                        checkWinners(redTiles);
+                        player = 2;
+                    } else {
+                        this.style.backgroundColor = 'green';                        
+                        greenTiles.push(this.class);
+                        checkWinners(greenTiles);
+                        player = 1;
+                    }
+                };
+            };
+
+
+
+            function checkWinners(tiles) {
+                let checker = (target, arr) => target.every(v => arr.includes(v));
+                let i = 0;
+                while (i < winners.length) {
+                    if (checker(winners[i],tiles)) {
+                        let board = document.querySelector('.board');
+                        let h2 = document.querySelector('h2');
+                        let winner = document.createElement('h1')
+                        winner.textContent = `Player ${player} wins!`;
+                        board.insertBefore(winner,h2);
+                        for (let j = 0; j < 9; j++) {
+                            let tile = document.querySelector(`#tile${j}`);
+                            tile.removeEventListener('click',ticTacToe);
+                        }
+                        break;
+                    };
+                    i++
+                }
+            };
+
+            function resetGame() {
+                for (let i = 0; i < 9; i++) {
+                    let tile = `#tile${i}`;
+                    let tileSelect = document.querySelector(tile);
+                    tileSelect.style.backgroundColor = 'blue';
+                    tileSelect.addEventListener('click',ticTacToe);
+                    redTiles = [];
+                    greenTiles = [];
+                    player = 1;
+                }
+                let board = document.querySelector('.board');
+                let winner = document.querySelector('h1');
+                board.removeChild(winner);
+            };
+
+            createBoard();
+
+
+            /*
+
+            Thanks to Mohammed Usman on StackOverflow for the checker function in checkWinners();
+            
+            https://stackoverflow.com/questions/53606337/check-if-array-contains-all-elements-of-another-array
+
+            https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+
+            https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+            */
+        </script>
+    </body>
+</html>
+
+
